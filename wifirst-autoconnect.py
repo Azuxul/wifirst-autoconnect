@@ -82,11 +82,11 @@ def getInternalLogin():
         }
 
     rep = session.post(url, data=data, headers=headers)
-
     if rep.status_code == 200:
         
         new_url = BeautifulSoup(rep.text, features="html.parser").find("meta", {"http-equiv" : "refresh"})
 
+        print(new_url)
         if new_url:
             start_index = new_url["content"].find("URL=") + 4
             new_url = new_url["content"][start_index:]
@@ -103,6 +103,7 @@ def login(withInternalLogin = True):
         data = credentials.INTERNAL_LOGIN
     else:
         data = getInternalLogin()
+        print(data)
     
     post = {}
 
@@ -114,5 +115,48 @@ def login(withInternalLogin = True):
         return True
 
 
-#print(getInternalLogin())
-login()
+import sys, getopt
+
+def main(argv):
+	password = None
+	username = None
+   
+	try:
+		opts, args = getopt.getopt(argv,"asu:p:")
+	except getopt.GetoptError:
+		print('wifirst-autoconnect.py')
+		print('-u <username> -p <password>')
+		print('-a Use direct connexion with saved info in credentials.py')
+		print('-s Use password and username in credentials.py')
+		sys.exit(2)
+	for opt, arg in opts:
+		if opt == '-h':
+			print('wifirst-autoconnect.py')
+			print('-u <username> -p <password>')
+			print('-a Use direct connexion with saved info in credentials.py')
+			print('-s Use password and username in credentials.py')
+			sys.exit()
+		elif opt == '-u':
+			username = arg
+		elif opt == '-p':
+			password = arg
+		elif opt == '-a':
+
+			print('Start connexion with direct connexion info')
+			login()
+			return
+		elif opt == '-s':
+			print('Start connexion with saved username and password')
+			login(False)
+			return
+			
+	if password is not None and username is not None:
+		PASSWORD = password
+		USER = username
+		
+		print('Start connexion')
+		login(False)
+		return
+
+if __name__ == "__main__":
+   main(sys.argv[1:])
