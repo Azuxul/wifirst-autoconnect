@@ -3,13 +3,13 @@ A python script to automatically connect your devices to the Wifirst network.
 Tested in CROUS residences (Smartcampus).
 
 
-## Dependancy
+## Dependency
 - Python3
 - beautifulsoup4
 
 ## Instalation
 
-Install dependancy
+Install dependency
 `pip install beautifulsoup4` 
 
 Clone this repository
